@@ -231,7 +231,6 @@ module Floating
 
   predicate is_zero t
   predicate is_positive t
-  constant zeroF   : t
   function div_rne t t : t
   function sqrt_rne t : t
   function rem t t : t
@@ -241,12 +240,12 @@ module Floating
      ensures { result = sqrt_rne x }
 
   val div_rne_ (x:t) (y:t) : t
-     requires { not (eq y zeroF) }
+     requires { not (is_zero y) }
      ensures { result = div_rne x y }
 
   val rem_ (x:t) (y:t) : t
-     requires { not (eq y zeroF) }
-     ensures{ result = rem x y }
+     requires { not (is_zero y) }
+     ensures { result = rem x y }
 end
 
 module Float32RNE
@@ -362,8 +361,7 @@ module Float32
     predicate gt = gt,
     predicate ge = ge,
     predicate eq = eq,
-    function div_rne = div_rne,
-    constant zeroF = zeroF
+    function div_rne = div_rne
 
   constant one : t = (1.0:t)
   axiom one_is_int: is_int one
@@ -385,8 +383,7 @@ module Float64
     predicate gt = gt,
     predicate ge = ge,
     predicate eq = eq,
-    function div_rne = div_rne,
-    constant zeroF = zeroF
+    function div_rne = div_rne
 
   constant one : t = (1.0:t)
   axiom one_is_int: is_int one
