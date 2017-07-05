@@ -378,6 +378,10 @@ package SPARK_Util.Subprograms is
    --     of modulus smaller or equal to 2 ** 64, with no functional contract
    --     (precondition, postcondition or contract cases).
 
+   function Is_Square_Root (E : Entity_Id) return Boolean;
+   --  @param E subprogram
+   --  @return True iff Subp is an IEEE square root (i.e. from ada numerics)
+
    function Is_Volatile_For_Internal_Calls (E : Entity_Id) return Boolean
    with Pre => Is_Subprogram (E);
    --  @param E any subprogram

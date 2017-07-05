@@ -1169,6 +1169,34 @@ package body SPARK_Util.Subprograms is
       end;
    end Is_Simple_Shift_Or_Rotate;
 
+   --------------------
+   -- Is_Square_Root --
+   --------------------
+
+   function Is_Square_Root (E : Entity_Id) return Boolean
+   is
+      Pkg : constant Entity_Id := Scope (E);
+   begin
+      --  Check if we are an instance of Sqrt from
+      --  ada__numerics__generic_elementary_functions.
+      if Is_Generic_Instance (Pkg)
+        and then Present (Package_Instantiation (Pkg))
+      then
+         declare
+            Generic_Pkg : constant Entity_Id :=
+              Get_Generic_Entity (Original_Node (Package_Instantiation (Pkg)));
+            Nam         : constant String := Unique_Name (E);
+            G_Nam       : constant String := Unique_Name (Generic_Pkg);
+         begin
+            return Nam'Length >= 6
+              and then Nam (Nam'Last - 5 .. Nam'Last) = "__sqrt"
+              and then G_Nam = "ada__numerics__generic_elementary_functions";
+         end;
+      else
+         return False;
+      end if;
+   end Is_Square_Root;
+
    ------------------------------------
    -- Is_Volatile_For_Internal_Calls --
    ------------------------------------

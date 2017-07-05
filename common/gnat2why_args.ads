@@ -127,6 +127,11 @@ package Gnat2Why_Args is
 
    Flow_Show_GG : Boolean := False;
 
+   --  Assume IEEE semantics for a number of operations that Ada does
+   --  not specify precisely. For the moment this only affects sqrt.
+
+   Proof_Assume_IEEE : Boolean := False;
+
    --  Generate guards for axioms of functions to avoid having an unsound axiom
    --  when a function has an inconsistent contract.
 

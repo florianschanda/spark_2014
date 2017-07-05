@@ -725,6 +725,13 @@ floating-point values:
   (exponential and trigonometric functions) for maximal portability. See
   :ref:`Semantics of Floating Point Operations`.
 
+* |GNATprove| treats Ada.Numerics.Elementary_Functions.Sqrt as
+  specified by the Ada RM (i.e. only assumes the result is
+  non-negative, and square roots of zero and one are zero and one,
+  respectively). Some runtimes (such as the default one for x86_64)
+  implement IEEE 754 square root; the |GNATprove| switch
+  ``--assume-ieee`` can be used to assume precise square root results.
+
 Additionally, |GNATprove| can detect all occurrences of specific portability
 issues in |SPARK| code (that is, parts of the program for which
 ``SPARK_Mode=On`` is specified, see section on :ref:`Identifying SPARK Code`)
