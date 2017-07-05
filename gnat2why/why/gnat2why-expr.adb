@@ -629,6 +629,17 @@ package body Gnat2Why.Expr is
    --  @param Params the translation parameters
    --  @return the Why expression corresponding to the shift or rotate
 
+   function Transform_Sqrt (Expr   : Node_Id;
+                            Domain : EW_Domain;
+                            Params : Transformation_Params)
+                            return W_Expr_Id
+   with Pre => Nkind (Expr) = N_Function_Call and then
+               Is_Square_Root (Get_Called_Entity (Expr));
+   --  @param Expr a call where the callee is a square root function
+   --  @param Domain the domain in which the translation happens
+   --  @param Params the translation parameters
+   --  @return the Why expression corresponding to the square root
+
    function Transform_Non_Binary_Modular_Operation
      (Ada_Node   : Node_Id;
       Ada_Type   : Entity_Id;
@@ -12080,7 +12091,9 @@ package body Gnat2Why.Expr is
          when N_Function_Call =>
             if Is_Simple_Shift_Or_Rotate (Get_Called_Entity (Expr)) then
                T := Transform_Shift_Or_Rotate_Call
-                      (Expr, Domain, Local_Params);
+                 (Expr, Domain, Local_Params);
+            elsif Is_Square_Root (Get_Called_Entity (Expr)) then
+               T := Transform_Sqrt (Expr, Domain, Local_Params);
             elsif Is_Predicate_Function (Get_Called_Entity (Expr)) then
 
                --  Calls to predicate functions should be replaced by their
@@ -14889,6 +14902,47 @@ package body Gnat2Why.Expr is
         Field_Assoc (1 .. Field_Index - 1);
       return Result;
    end Transform_Record_Component_Associations;
+
+   --------------------
+   -- Transform_Sqrt --
+   --------------------
+
+   function Transform_Sqrt (Expr   : Node_Id;
+                            Domain : EW_Domain;
+                            Params : Transformation_Params)
+                            return W_Expr_Id
+   is
+      --  Deal with the parameter
+      Nb_Of_Refs  : Natural;
+      Nb_Of_Lets  : Natural;
+
+      Args        : constant W_Expr_Array :=
+        Compute_Call_Args (Expr, Domain, Nb_Of_Refs, Nb_Of_Lets, Params);
+      pragma Assert (Args'Length = 1);
+      pragma Assert (Nb_Of_Refs = 0);
+      pragma Assert (Nb_Of_Lets = 0);
+
+      Arg         : constant W_Expr_Id := Args (Args'First);
+
+      --  Get the appropriate sqrt function
+      Typ         : constant W_Type_Id := Base_Why_Type (Etype (Expr));
+      Name        : constant W_Identifier_Id := MF_Floats (Typ).Sqrt;
+   begin
+      if Domain = EW_Prog then
+         return New_VC_Call (Ada_Node => Expr,
+                             Domain   => Domain,
+                             Name     => To_Program_Space (Name),
+                             Progs    => (1 => Arg),
+                             Reason   => VC_Precondition,
+                             Typ      => Typ);
+      else
+         return New_Call (Ada_Node => Expr,
+                          Domain   => Domain,
+                          Name     => Name,
+                          Args     => (1 => Arg),
+                          Typ      => Typ);
+      end if;
+   end Transform_Sqrt;
 
    ------------------------------------
    -- Transform_Shift_Or_Rotate_Call --
