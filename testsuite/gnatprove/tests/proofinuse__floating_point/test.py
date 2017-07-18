@@ -6,4 +6,6 @@ from test_support import *
 # all quantifiers.
 #
 # Once CVC4 supports floats we will include it here too.
-prove_all(prover=["z3_noquant,altergo"], steps=5000, counterexample=False)
+prove_all(prover=["cvc4","z3_noquant","altergo"],
+          steps=5000,
+          counterexample=False)
