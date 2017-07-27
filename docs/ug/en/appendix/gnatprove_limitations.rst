@@ -148,13 +148,15 @@ Proof Limitations
    error is emitted for any use of the 'Update attribute on
    multidimensional unconstrained arrays.
 
-#. The difference between the floating-point values +0 and -0 (as defined in
-   IEEE-754 standard) is ignored in proof. This is correct for all programs that
-   do not exploit the difference in bit-pattern between +0 and -0. For example,
-   the following specially crafted program is proved by |GNATprove| but fails at
-   run time due to a division by zero, because function ``Magic`` exploits the
-   difference of bit-pattern between +0 and -0 by using ``Unchecked_Conversion``
-   to return a different integer value for arguments +0 and -0.
+#. The difference between the floating-point values +0 and -0 (as
+   defined in IEEE-754 standard) is ignored by Alt-Ergo (but not by
+   CVC4 or Z3). This is correct for all programs that do not exploit
+   the difference in bit-pattern between +0 and -0. For example, the
+   following specially crafted program is proved by |GNATprove| but
+   fails at run time due to a division by zero, because function
+   ``Magic`` exploits the difference of bit-pattern between +0 and -0
+   by using ``Unchecked_Conversion`` to return a different integer
+   value for arguments +0 and -0.
 
    .. code-block:: ada
 

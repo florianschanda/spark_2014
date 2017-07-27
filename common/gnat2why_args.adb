@@ -54,6 +54,7 @@ package body Gnat2Why_Args is
      "flow_generate_contracts";
    Flow_Termination_Name        : constant String := "flow_termination_proof";
    Flow_Show_GG_Name            : constant String := "flow_show_gg";
+   Proof_Assume_IEEE_Name       : constant String := "proof_assume_ieee";
    Proof_Generate_Guards_Name   : constant String :=
      "proof_generate_axiom_guards";
    Limit_Subp_Name              : constant String := "limit_subp";
@@ -112,6 +113,7 @@ package body Gnat2Why_Args is
                                                Flow_Generate_Contracts_Name);
       Flow_Termination_Proof  := Get_Opt_Bool (V, Flow_Termination_Name);
       Flow_Show_GG            := Get_Opt_Bool (V, Flow_Show_GG_Name);
+      Proof_Assume_IEEE       := Get_Opt_Bool (V, Proof_Assume_IEEE_Name);
       Proof_Generate_Guards   := Get_Opt_Bool (V, Proof_Generate_Guards_Name);
       Pedantic                := Get_Opt_Bool (V, Pedantic_Name);
       No_Loop_Unrolling       := Get_Opt_Bool (V, No_Loop_Unrolling_Name);
@@ -204,6 +206,7 @@ package body Gnat2Why_Args is
       Set_Field (Obj, Flow_Generate_Contracts_Name, Flow_Generate_Contracts);
       Set_Field (Obj, Flow_Termination_Name, Flow_Termination_Proof);
       Set_Field (Obj, Flow_Show_GG_Name, Flow_Show_GG);
+      Set_Field (Obj, Proof_Assume_IEEE_Name, Proof_Assume_IEEE);
       Set_Field (Obj, Proof_Generate_Guards_Name, Proof_Generate_Guards);
       Set_Field (Obj, Pedantic_Name, Pedantic);
       Set_Field (Obj, No_Loop_Unrolling_Name, No_Loop_Unrolling);

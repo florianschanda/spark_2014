@@ -35,6 +35,7 @@ with Flow_Generated_Globals.Phase_2; use Flow_Generated_Globals.Phase_2;
 with Flow_Refinement;                use Flow_Refinement;
 with Flow_Utility;                   use Flow_Utility;
 with GNAT.Source_Info;
+with Gnat2Why_Args;
 with Gnat2Why.Annotate;              use Gnat2Why.Annotate;
 with Gnat2Why.Error_Messages;        use Gnat2Why.Error_Messages;
 with Gnat2Why.Expr.Loops;            use Gnat2Why.Expr.Loops;
@@ -633,7 +634,8 @@ package body Gnat2Why.Expr is
                             Domain : EW_Domain;
                             Params : Transformation_Params)
                             return W_Expr_Id
-   with Pre => Nkind (Expr) = N_Function_Call and then
+   with Pre => Gnat2Why_Args.Proof_Assume_IEEE and then
+               Nkind (Expr) = N_Function_Call and then
                Is_Square_Root (Get_Called_Entity (Expr));
    --  @param Expr a call where the callee is a square root function
    --  @param Domain the domain in which the translation happens
@@ -12092,7 +12094,9 @@ package body Gnat2Why.Expr is
             if Is_Simple_Shift_Or_Rotate (Get_Called_Entity (Expr)) then
                T := Transform_Shift_Or_Rotate_Call
                  (Expr, Domain, Local_Params);
-            elsif Is_Square_Root (Get_Called_Entity (Expr)) then
+            elsif Gnat2Why_Args.Proof_Assume_IEEE
+              and then Is_Square_Root (Get_Called_Entity (Expr))
+            then
                T := Transform_Sqrt (Expr, Domain, Local_Params);
             elsif Is_Predicate_Function (Get_Called_Entity (Expr)) then
 

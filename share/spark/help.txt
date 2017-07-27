@@ -51,6 +51,7 @@ gnatprove basic switches:
    . error         - Treat warnings as errors
 
 gnatprove advanced switches:
+ --assume-ieee        Assume IEEE square root function
  -d, --debug          Debug mode
  --flow-debug         Extra debugging for flow analysis (requires graphviz)
  --limit-line=f:l     Limit analysis to given file and line
