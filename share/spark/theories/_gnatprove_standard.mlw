@@ -475,12 +475,6 @@ module Boolean
 
   (* Boolean logical connectors, functions for conversion of booleans, etc *)
 
-  function to_int (b : bool) : int =
-   if b = True then 1 else 0
-
-  function of_int (i : int) : bool =
-   if i = 0 then False else True
-
   function last : int = 1
   function first : int = 0
 
